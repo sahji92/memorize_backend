@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const PostMessage=require("../models/postMessage");
 
  const getPosts=async (req,res)=>{
@@ -21,4 +22,29 @@ const PostMessage=require("../models/postMessage");
         res.status(409).json({message:error.message})
     }
 }
-module.exports={createPost,getPosts}
+
+const updatePost=async(req,res)=>{
+    const{id:_id}=req.params;
+    const post=req.body;
+    if(!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(404).send('No post with that id');
+    const updatedPost=await PostMessage.findByIdAndDelete(_id,post,{new:true});
+    res.json(updatedPost);
+}
+
+const deletePost = async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+    await PostMessage.findByIdAndDelete(id);
+    res.json({ message: "Post deleted successfully." });
+}
+
+const likePost = async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
+    const post = await PostMessage.findById(id);
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true });
+        res.json(updatedPost);
+}
+
+module.exports={createPost,getPosts,updatePost,deletePost,likePost}
