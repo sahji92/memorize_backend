@@ -22,9 +22,9 @@ const postSchema=new Schema({
         type:[String],
         required:false
     },
-    likeCount:{
-        type:Number,
-        default:0
+    likes:{
+        type:[String],
+        default:[]
     },
     createdAt:{
         type:Date,
@@ -32,4 +32,4 @@ const postSchema=new Schema({
     }
 },{timestamps:true});
 const PostMessage=mongoose.model('PostMessage',postSchema);
-module.exports =PostMessage
+module.exports =PostMessage;
