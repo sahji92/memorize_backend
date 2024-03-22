@@ -1,11 +1,11 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const bcrypt =require("bcrypt");
+const jwt =require("jsonwebtoken");
 
-import UserModal from "../models/user.js";
+const UserModal =require("../models/user.js");
 
-const secret = 'test';
+const secret ='5rWxwIu3suMAoqH0kWMSriq92d76zKbGW84Djo0_vdE';
 
-export const signin = async (req, res) => {
+ const signin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -17,17 +17,16 @@ export const signin = async (req, res) => {
 
     if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: "1h" });
-
+    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, { expiresIn: "7d" });
     res.status(200).json({ result: oldUser, token });
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
 
-export const signup = async (req, res) => {
+ const signup = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
-
+console.log("in signup contrllr")
   try {
     const oldUser = await UserModal.findOne({ email });
 
@@ -46,3 +45,4 @@ export const signup = async (req, res) => {
     console.log(error);
   }
 };
+module.exports={signin,signup}

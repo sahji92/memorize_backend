@@ -10,9 +10,13 @@ const postSchema=new Schema({
         type:String,
         required:true
     },
-    creator:{
+    name:{
         type:String,
         required:true
+    },
+    creator:{
+        type:String,
+        required:false
     },
     selectedFile:{
         type:String,
