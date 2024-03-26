@@ -17,6 +17,18 @@ const PostMessage=require("../models/postMessage");
     }
 }
 
+const getPost = async (req, res) => { 
+    const { id } = req.params;
+
+    try {
+        const post = await PostMessage.findById(id);
+        
+        res.status(200).json(post);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags } = req.query;
     try {
@@ -76,4 +88,4 @@ post.likes=post.likes.filter((id)=>(id)!==String(req.userId));//if id already ex
         res.json(updatedPost);
 }
 
-module.exports={createPost,getPosts,updatePost,deletePost,likePost,getPostsBySearch}
+module.exports={createPost,getPosts,updatePost,deletePost,likePost,getPostsBySearch,getPost}
